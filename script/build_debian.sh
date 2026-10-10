@@ -9,7 +9,7 @@ popd > /dev/null
 pushd $scriptdir/..
 
 builddir="./build/debian"
-cmake ./projects/debian -B$builddir -G"Unix Makefiles" -DCMAKE_BUILD_TYPE=Release
+cmake . -B$builddir -G"Unix Makefiles" -DCMAKE_BUILD_TYPE=Release
 
 pushd $builddir
 

@@ -9,7 +9,7 @@ popd > /dev/null
 pushd $scriptdir/..
 
 builddir="./build/debian_debug"
-cmake ./projects/debian -B$builddir -G"Unix Makefiles" -DCMAKE_BUILD_TYPE=Debug
+cmake . -B$builddir -G"Unix Makefiles" -DCMAKE_BUILD_TYPE=Debug
 
 pushd $builddir
 

@@ -1,0 +1,13 @@
+Initial setup reminders + recommendations
+
+--------------------------------------------------
+  lock down ptlib's version
+--------------------------------------------------
+in file
+    ./script/debian/obtain_ptlib.sh
+
+set the var
+    repo_version=
+
+    to a specific branch / tag / commit
+--------------------------------------------------

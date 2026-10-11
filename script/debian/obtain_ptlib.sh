@@ -1,9 +1,11 @@
 #!/bin/bash
 
+
 #find out script directory
 pushd $(dirname "${BASH_SOURCE[0]}") > /dev/null
 scriptdir=$(pwd)
 popd > /dev/null
+
 
 #move to project root directory
 project_root=$scriptdir/../..
@@ -19,13 +21,13 @@ mkdir -v $tmp_dir_install
 
 pushd $tmp_dir_install
 
-
+# cfg: dependency source and version
+repo_version=$(cat ${scriptdir}/data/cfg/PTLIB_VERSION)
 download_link=https://github.com/pttoth/ptlib
-ptlib_tempdirname=ptlib
-repo_version=v2.0.0b13
 
-git clone $download_link $ptlib_tempdirname
-cd $ptlib_tempdirname
+# acquire dependency
+git clone $download_link ptlib
+cd ptlib
 git pull
 git checkout $repo_version
 

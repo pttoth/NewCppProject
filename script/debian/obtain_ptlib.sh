@@ -45,7 +45,7 @@ mkdir -vp ./lib/ptlib/include
 mkdir -vp ./lib/ptlib/src
 
 #move built libs into 'lib' directory
-cp -v${tmp_dir_install}/ptlib/bin/debian/libptlib.a ./lib
+cp -v ${tmp_dir_install}/ptlib/bin/debian/libptlib.a ./lib
 
 cp -vr ${tmp_dir_install}/ptlib/include/* ./lib/ptlib/include/
 cp -vr ${tmp_dir_install}/ptlib/src/*     ./lib/ptlib/src/

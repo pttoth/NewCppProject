@@ -57,7 +57,7 @@ endif()
 #----------------------
 
 
-add_executable( cmaketest
+add_executable( __CFG_TARGET_EXECUTABLE_NAME__
 
 __CFG_SOURCES__
 __CFG_SOURCES_COMMON__
@@ -67,7 +67,7 @@ __CFG_HEADERS_COMMON__
 )
 
 
-target_include_directories( cmaketest PRIVATE
+target_include_directories( __CFG_TARGET_EXECUTABLE_NAME__ PRIVATE
 
 __CFG_INCLUDE_DIRS__
 __CFG_INCLUDE_DIRS_COMMON__
@@ -77,13 +77,13 @@ __CFG_INCLUDE_DIRS_COMMON__
 
 #guide to set up library linking paths
 #  directories and library names both come here
-#target_link_libraries( cmaketest
+#target_link_libraries( __CFG_TARGET_EXECUTABLE_NAME__
 #   -L<directory>
 #   -l<applib>
 #)
 
 #set up library linking paths
-target_link_libraries( cmaketest
+target_link_libraries( __CFG_TARGET_EXECUTABLE_NAME__
 
 __CFG_LINK__
 __CFG_LINK_COMMON__

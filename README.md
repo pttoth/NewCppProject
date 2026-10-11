@@ -9,7 +9,7 @@ Template new project containing:
 # How to use
 
 ## Generate project
-Use 'script/generate_project.sh'.
+Use `script/generate_project.sh`.
 
 ## Build project for specific platform
 
@@ -18,4 +18,6 @@ Use 'script/generate_project.sh'.
 - debian_arm64 (experimental: not yet implemented)
 - win64 (not yet implemented)
 
-Use the 'script/build_\<platform\>' scripts.
+Use the `script/build_<platform>.sh` scripts.
+
+Add `debug` parameter, if needed ( like so: `script/build_<platform> debug` ).

@@ -1,3 +1,7 @@
-# cmake template project
+# pttoth's new cpp project template
 
-A versatile CMake template project to easily set up the structure of a new project.
+Template new project containing:
+- instant support for my multiplatform needs
+- decent project directory structure
+- maintenance helper scripts
+- cmake setup tuned to above needs

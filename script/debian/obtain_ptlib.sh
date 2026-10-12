@@ -54,4 +54,4 @@ cp -vr ${tmp_dir_install}/ptlib/src/*     ./lib/ptlib/src/
 
 
 #jump back to starting directory
-popd
+popd > /dev/null

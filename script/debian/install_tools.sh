@@ -16,82 +16,32 @@ packages="$packages qtcreator"
 #--------------------------------------------------
 # config (auto-set)
 
-step_Install=true
-step_Check=true
-
-all_installed=true
-
-packages_missing=""
-
-errorcode=0
+params_forwarded=""
 
 #--------------------------------------------------
+#find out script directory
+pushd $(dirname "${BASH_SOURCE[0]}") > /dev/null
+scriptdir=$(pwd)
+popd > /dev/null
+
+
 # read params
 while [[ $# -gt 0 ]]; do
     case "$1" in
         --dry-run)
-            step_Install=false
+            params_forwarded="$params_forwarded $1"
             ;;
         --no-check)
-            step_Check=false
+            params_forwarded="$params_forwarded $1"
             ;;
         *)
-            echo "Invalid parameter: $1"
-            exit 1
             ;;
     esac
     shift
 done
 
-# TODO: disable
-# debug
-#$step_Install || echo "--dry-run"
-#$step_Check   || echo "--no-check"
 
-#--------------------------------------------------
-# check whether packages are installed
-if $step_Check == "true"; then
-    echo "Checking installed packages..."
-    for package in $packages; do
-        if dpkg-query -W -f='${Status}' "$package" 2>/dev/null | grep -q "install ok installed"; then
-            echo "[ OK ] $package"
-        else
-            echo "[    ] $package"
-            packages_missing="$packages_missing $package"
-            all_installed=false
-        fi
-    done
-
-    if $all_installed == "true"; then
-        # success, all installed
-        exit 0
-    else
-        # packages missing
-        errorcode=1
-    fi
-
-else
-    # check was skipped
-    packages_missing=$packages
-fi
-
-
-#--------------------------------------------------
-# install packages
-command="apt install $packages_missing -y"
-
-if $step_Install == "true"; then
-
-    echo "installing packages:"
-    echo "  $packages_missing"
-    echo
-    echo "executing command:"
-    echo "  $command"
-
-    $command
-else
-    echo "install packages with:"
-    echo "  sudo $command"
-fi
+"${scriptdir}/apt_installer.sh" $params_forwarded --packages $packages
+errorcode=$?
 
 exit $errorcode

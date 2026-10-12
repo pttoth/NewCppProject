@@ -70,7 +70,7 @@ done
 #--------------------------------------------------
 # check whether packages are installed
 if $step_Check == "true"; then
-    if [ -z $packages ] ; then
+    if [ -z "$packages" ] ; then
         echo "Nothing to install."
         exit 0
     fi

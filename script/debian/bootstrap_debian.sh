@@ -42,6 +42,7 @@ fi
 # build project
 ../generate_project.sh debian_amd64
 ../build_debian_amd64.sh
+../copy_startup_script.sh debian_amd64
 
 
 popd > /dev/null # from 'scriptdir'

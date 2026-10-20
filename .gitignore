@@ -6,6 +6,7 @@ CMakeLists.txt
 bin/*
 build/*
 lib/*
+log/*
 projects/build-*
 
 #-------------------------

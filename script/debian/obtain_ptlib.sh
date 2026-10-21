@@ -22,7 +22,7 @@ mkdir -v $tmp_dir_install
 pushd $tmp_dir_install
 
 # cfg: dependency source and version
-repo_version=$(cat ${scriptdir}/data/cfg/PTLIB_VERSION)
+repo_version=$(cat ${scriptdir}/../data/cfg/PTLIB_VERSION)
 download_link=https://github.com/pttoth/ptlib
 
 # acquire dependency
@@ -32,7 +32,7 @@ git pull
 git checkout $repo_version
 
 #call the lib's build script
-source ./script/build_debian.sh
+./bootstrap.sh
 
 popd
 

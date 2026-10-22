@@ -1,25 +1,32 @@
 #!/bin/bash
 
-
 #find out script directory
 pushd $(dirname "${BASH_SOURCE[0]}") > /dev/null
 scriptdir=$(pwd)
 popd > /dev/null
 
+project_root="$scriptdir"/../..
+
+echo "Obtaining ptlib (arch: '$cfg_arch')"
+
+#-------------------------
 # read and validate architeture param
 cfg_arch=$1
 arch=""
-echo "Obtaining ptlib (arch: '$cfg_arch')"
-if [[ "$cfg_arch" == "amd64" || "$cfg_arch" == "arm64" ]]; then
-    arch="$cfg_arch"
-else
+if [ -z "$cfg_arch" ]; then
+    cfg_arch=$( "${project_root}"/script/debian/detect_arch.sh )
+    echo "No architecture defined, '$cfg_arch' detected"
+fi
+
+if ! "${project_root}"/script/debian/validate_arch.sh $cfg_arch; then
     echo "Unknown architecture: '$cfg_arch'"
     exit 1
 fi
 
+arch=$cfg_arch
 
-#move to project root directory
-project_root="$scriptdir/../.."
+#-------------------------
+
 pushd "$project_root" > /dev/null
     #set up temp install directory
     tmp_dir_install="/tmp/pt_install/$arch"
@@ -38,8 +45,10 @@ pushd "$project_root" > /dev/null
         git checkout $repo_version
 
         #call the lib's build script
-        #./script/debian_$arch/bootstrap_debian_$arch.sh
-        ./script/debian_$arch/bootstrap_debian.sh
+        if ! ./script/debian_$arch/bootstrap_debian.sh $arch; then
+            exit 1
+        fi
+
     popd > /dev/null
 
     # backup existing 'lib/' contents, if needed

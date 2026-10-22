@@ -18,7 +18,7 @@ pushd "$project_root" > /dev/null
 # autoconfig results
 cfg_system=""
 arch=""
-arch_forced=""
+archForced=""
 
 echo -n "Identifying system... "
 
@@ -33,10 +33,10 @@ elif [ -f /etc/debian_version ]; then
     echo "Debian"
     cfg_system=debian
     cfg_arch=$( "${project_root}"/script/debian/detect_arch.sh )
-    arch_forced=$( "${project_root}"/script/debian/detect_arch.sh force )
+    archForced=$( "${project_root}"/script/debian/detect_arch.sh force )
 
     if ! "${project_root}"/script/debian/validate_arch.sh $cfg_arch; then
-        echo "Unknown architecture: '$arch_forced'"
+        echo "Unknown architecture: '$archForced'"
         exit 1
     fi
 
@@ -47,7 +47,7 @@ elif [ -f /etc/debian_version ]; then
 
 # other
 else
-    echo "Unknown"
+    echo "Unknown: '$archForced'"
     echo "  Aborting due to unknown system."
     exit 1
 fi

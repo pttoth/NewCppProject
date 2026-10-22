@@ -1,5 +1,7 @@
 #!/bin/bash
 
+set -euo pipefail
+
 #find out script directory
 pushd $(dirname "${BASH_SOURCE[0]}") > /dev/null
 scriptdir=$(pwd)
@@ -31,8 +33,7 @@ arch=$cfg_arch
 
 #-------------------------
 
-
-pushd "${project_root}/script/debian" > /dev/null
+pushd "${scriptdir}" > /dev/null
 
 
 #--------------------------------------------------
@@ -57,7 +58,6 @@ fi
 #--------------------------------------------------
 # setup in userspace
 ./obtain_ptlib.sh
-
 
 # build project
 ../generate_project.sh debian_$arch

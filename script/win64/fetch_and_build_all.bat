@@ -4,16 +4,17 @@ call .\set_env.bat
 ::gets the following variables
 ::  win_script_dir
 ::  root_directory
+::  toolset_name
 ::  build_platform
 ::  temp_dir
 
 @echo off
 
-call .\fetch_and_build_SDL.bat
-@echo off
 call .\fetch_and_build_glew.bat
 @echo off
 call .\fetch_and_build_libpng.bat
+@echo off
+call .\fetch_and_build_SDL.bat
 @echo off
 ::call .\fetch_and_build_libjpeg-turbo.bat
 @echo off

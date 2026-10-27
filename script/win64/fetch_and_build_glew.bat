@@ -4,6 +4,7 @@ call .\set_env.bat
 ::gets the following variables
 ::  win_script_dir
 ::  root_directory
+::  toolset_name
 ::  build_platform
 ::  temp_dir
 
@@ -20,6 +21,8 @@ set glew_filename_library_dir=%temp_dir%\glew-2.1.0
 set target_dir_debug=%root_directory%\bin\%build_platform%_debug
 set target_dir_release=%root_directory%\bin\%build_platform%
 
+set target_lib_dir=%root_directory%\lib\%build_platform%
+
 pushd "%temp_dir%"
 
 @echo ------------------------------
@@ -34,7 +37,7 @@ pushd "%temp_dir%"
 
 ::download Glew
 ::    use 'curl' in local toolset
-::"%root_directory%\build_toolset\win64\PortableGit\mingw64\bin\curl.exe" %download_link% -L -O
+::"%root_directory%\build_toolset\%toolset_name%\PortableGit\mingw64\bin\curl.exe" %download_link% -L -O
 ::    use 'curl' in system installed toolset
 ::"C:\Program Files\Git\mingw64\bin\curl.exe" %download_link% -L -O
 ::    use PowerShell
@@ -82,26 +85,26 @@ mkdir "%target_dir_release%" >nul 2>&1
 ::@echo DELETING FOLDER: '%root_directory%\lib\glew-2.1.0' ...
 ::rmdir /s "%root_directory%\lib\glew-2.1.0" /q
 
-mkdir "%root_directory%\lib" >nul 2>&1
-mkdir "%root_directory%\lib\glew-2.1.0" >nul 2>&1
-mkdir "%root_directory%\lib\glew-2.1.0\include" >nul 2>&1
-mkdir "%root_directory%\lib\glew-2.1.0\include\GL" >nul 2>&1
-mkdir "%root_directory%\lib\glew-2.1.0\bin" >nul 2>&1
+mkdir "%target_lib_dir%" >nul 2>&1
+mkdir "%target_lib_dir%\glew-2.1.0" >nul 2>&1
+mkdir "%target_lib_dir%\glew-2.1.0\include" >nul 2>&1
+mkdir "%target_lib_dir%\glew-2.1.0\include\GL" >nul 2>&1
+mkdir "%target_lib_dir%\glew-2.1.0\bin" >nul 2>&1
 ::copy include/
-copy "%temp_dir%\glew-2.1.0\include\GL\eglew.h" "%root_directory%\lib\glew-2.1.0\include\GL\eglew.h" /y
-copy "%temp_dir%\glew-2.1.0\include\GL\glew.h" "%root_directory%\lib\glew-2.1.0\include\GL\glew.h" /y
-copy "%temp_dir%\glew-2.1.0\include\GL\glxew.h" "%root_directory%\lib\glew-2.1.0\include\GL\glxew.h" /y
-copy "%temp_dir%\glew-2.1.0\include\GL\wglew.h" "%root_directory%\lib\glew-2.1.0\include\GL\wglew.h" /y
+copy "%temp_dir%\glew-2.1.0\include\GL\eglew.h"     "%target_lib_dir%\glew-2.1.0\include\GL\eglew.h" /y
+copy "%temp_dir%\glew-2.1.0\include\GL\glew.h"      "%target_lib_dir%\glew-2.1.0\include\GL\glew.h" /y
+copy "%temp_dir%\glew-2.1.0\include\GL\glxew.h"     "%target_lib_dir%\glew-2.1.0\include\GL\glxew.h" /y
+copy "%temp_dir%\glew-2.1.0\include\GL\wglew.h"     "%target_lib_dir%\glew-2.1.0\include\GL\wglew.h" /y
 ::copy binaries to lib/
-copy "%temp_dir%\glew-2.1.0\lib\glew32.dll" "%root_directory%\lib\glew-2.1.0\bin\glew32.dll" /y
-copy "%temp_dir%\glew-2.1.0\lib\glew32mx.dll" "%root_directory%\lib\glew-2.1.0\bin\glew32mx.dll" /y
-copy "%temp_dir%\glew-2.1.0\lib\libglew32.a" "%root_directory%\lib\glew-2.1.0\bin\libglew32.a" /y
-copy "%temp_dir%\glew-2.1.0\lib\libglew32.dll.a" "%root_directory%\lib\glew-2.1.0\bin\libglew32.dll.a" /y
-copy "%temp_dir%\glew-2.1.0\lib\libglew32mx.a" "%root_directory%\lib\glew-2.1.0\bin\libglew32mx.a" /y
-copy "%temp_dir%\glew-2.1.0\lib\libglew32mx.dll.a" "%root_directory%\lib\glew-2.1.0\bin\libglew32mx.dll.a" /y
+copy "%temp_dir%\glew-2.1.0\lib\glew32.dll"         "%target_lib_dir%\glew-2.1.0\bin\glew32.dll" /y
+copy "%temp_dir%\glew-2.1.0\lib\glew32mx.dll"       "%target_lib_dir%\glew-2.1.0\bin\glew32mx.dll" /y
+copy "%temp_dir%\glew-2.1.0\lib\libglew32.a"        "%target_lib_dir%\glew-2.1.0\bin\libglew32.a" /y
+copy "%temp_dir%\glew-2.1.0\lib\libglew32.dll.a"    "%target_lib_dir%\glew-2.1.0\bin\libglew32.dll.a" /y
+copy "%temp_dir%\glew-2.1.0\lib\libglew32mx.a"      "%target_lib_dir%\glew-2.1.0\bin\libglew32mx.a" /y
+copy "%temp_dir%\glew-2.1.0\lib\libglew32mx.dll.a"  "%target_lib_dir%\glew-2.1.0\bin\libglew32mx.dll.a" /y
 ::copy binaries to bin/
-copy "%temp_dir%\glew-2.1.0\lib\glew32.dll" "%target_dir_debug%\glew32.dll" /y
-copy "%temp_dir%\glew-2.1.0\lib\glew32.dll" "%target_dir_release%\glew32.dll" /y
+copy "%temp_dir%\glew-2.1.0\lib\glew32.dll"         "%target_dir_debug%\glew32.dll" /y
+copy "%temp_dir%\glew-2.1.0\lib\glew32.dll"         "%target_dir_release%\glew32.dll" /y
 
 popd
 

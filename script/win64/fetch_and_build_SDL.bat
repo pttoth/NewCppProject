@@ -4,6 +4,7 @@ call .\set_env.bat
 ::gets the following variables
 ::  win_script_dir
 ::  root_directory
+::  toolset_name
 ::  build_platform
 ::  temp_dir
 
@@ -22,6 +23,8 @@ set repo_version=release-2.30.5
 
 set target_dir_debug=%root_directory%\bin\%build_platform%_debug
 set target_dir_release=%root_directory%\bin\%build_platform%
+
+set target_lib_dir=%root_directory%\lib\%build_platform%
 
 pushd "%temp_dir%"
 
@@ -46,7 +49,7 @@ git checkout %sdl_commit_current%
 
 mkdir "%temp_dir%\SDL_build" >nul 2>&1
 cd "%temp_dir%\SDL"
-cmake . -B"%temp_dir%\SDL_build" -G"MinGW Makefiles"
+cmake -B"%temp_dir%\SDL_build" -G"MinGW Makefiles" .
 cd "%temp_dir%\SDL_build"
 @echo -----
 @echo building with %NUMBER_OF_PROCESSORS% threads
@@ -55,7 +58,7 @@ mingw32-make -j %NUMBER_OF_PROCESSORS% --output-sync
 
 @echo ------------------------------
 @echo setting up SDL2 for use
-@echo   folder: "%root_directory%\lib\SDL2"
+@echo   folder: "%target_lib_dir%\SDL2"
 @echo ------------------------------
 
 ::NOTE: careful with directory deletion because Batch is abhorrently unpredictable with quotes and spaces in variables
@@ -70,24 +73,24 @@ mkdir "%root_directory%\bin" >nul 2>&1
 mkdir "%target_dir_debug%" >nul 2>&1
 mkdir "%target_dir_release%" >nul 2>&1
 
-mkdir "%root_directory%\lib\" >nul 2>&1
-mkdir "%root_directory%\lib\SDL2" >nul 2>&1
-mkdir "%root_directory%\lib\SDL2\include" >nul 2>&1
-mkdir "%root_directory%\lib\SDL2\include\SDL2" >nul 2>&1
-mkdir "%root_directory%\lib\SDL2\bin" >nul 2>&1
+mkdir "%target_lib_dir%\" >nul 2>&1
+mkdir "%target_lib_dir%\SDL2" >nul 2>&1
+mkdir "%target_lib_dir%\SDL2\include" >nul 2>&1
+mkdir "%target_lib_dir%\SDL2\include\SDL2" >nul 2>&1
+mkdir "%target_lib_dir%\SDL2\bin" >nul 2>&1
 
 ::copy include
-xcopy "%temp_dir%\SDL\include\*.h" "%root_directory%\lib\SDL2\include\SDL2\" /sy
+xcopy "%temp_dir%\SDL\include\*.h"              "%target_lib_dir%\SDL2\include\SDL2\" /sy
 ::copy binaries to lib/
-copy "%temp_dir%\SDL_build\libSDL2.a" "%root_directory%\lib\SDL2\bin\libSDL2-static.a"
-copy "%temp_dir%\SDL_build\libSDL2.dll.a" "%root_directory%\lib\SDL2\bin\libSDL2.dll"
-copy "%temp_dir%\SDL_build\libSDL2main.a" "%root_directory%\lib\SDL2\bin\libSDL2main.a"
-::copy "%temp_dir%\SDL_build\libSDL2-static.a" "%root_directory%\lib\SDL2\bin\libSDL2-static.a"
-copy "%temp_dir%\SDL_build\SDL2.dll" "%root_directory%\lib\SDL2\bin\SDL2.dll"
+copy "%temp_dir%\SDL_build\libSDL2.a"           "%target_lib_dir%\SDL2\bin\libSDL2-static.a"
+copy "%temp_dir%\SDL_build\libSDL2.dll.a"       "%target_lib_dir%\SDL2\bin\libSDL2.dll"
+copy "%temp_dir%\SDL_build\libSDL2main.a"       "%target_lib_dir%\SDL2\bin\libSDL2main.a"
+::copy "%temp_dir%\SDL_build\libSDL2-static.a"     "%target_lib_dir%\SDL2\bin\libSDL2-static.a"
+copy "%temp_dir%\SDL_build\SDL2.dll"            "%target_lib_dir%\SDL2\bin\SDL2.dll"
 
 ::copy binaries to bin/
-copy "%temp_dir%\SDL_build\SDL2.dll" "%target_dir_debug%\SDL2.dll" /y
-copy "%temp_dir%\SDL_build\SDL2.dll" "%target_dir_release%\SDL2.dll" /y
+copy "%temp_dir%\SDL_build\SDL2.dll"    "%target_dir_debug%\SDL2.dll" /y
+copy "%temp_dir%\SDL_build\SDL2.dll"    "%target_dir_release%\SDL2.dll" /y
 
 
 

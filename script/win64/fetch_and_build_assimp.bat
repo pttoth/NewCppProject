@@ -4,6 +4,7 @@ call .\set_env.bat
 ::gets the following variables
 ::  win_script_dir
 ::  root_directory
+::  toolset_name
 ::  build_platform
 ::  temp_dir
 
@@ -40,7 +41,7 @@ git checkout %repo_version%
 @echo ------------------------------
 mkdir "%assimp_repo_path%\build" >nul 2>&1
 cd "%assimp_repo_path%\build"
-cmake "%assimp_repo_path%" -B"%assimp_repo_path%\build" -G"MinGW Makefiles" -D"ASSIMP_BUILD_ASSIMP_TOOLS=OFF" -D"ASSIMP_BUILD_TESTS=OFF" -D"ASSIMP_BUILD_ASSIMP_TOOLS=OFF" -D"ASSIMP_BUILD_NO_EXPORT=ON"
+cmake -B"%assimp_repo_path%\build" -G"MinGW Makefiles" -D"ASSIMP_BUILD_ASSIMP_TOOLS=OFF" -D"ASSIMP_BUILD_TESTS=OFF" -D"ASSIMP_BUILD_ASSIMP_TOOLS=OFF" -D"ASSIMP_BUILD_NO_EXPORT=ON" "%assimp_repo_path%"
 
 @echo ------------------------------
 @echo building with %NUMBER_OF_PROCESSORS% threads
@@ -76,14 +77,13 @@ mkdir "%root_directory%\lib\assimp" >nul 2>&1
 mkdir "%root_directory%\lib\assimp\bin" >nul 2>&1
 mkdir "%target_dir_debug%" >nul 2>&1
 mkdir "%target_dir_release%" >nul 2>&1
-
 mkdir "%root_directory%\lib\assimp\include" >nul 2>&1
 mkdir "%root_directory%\lib\assimp\include\assimp" >nul 2>&1
 
 ::copy to ./lib/assimp
-copy "%assimp_repo_path%\build\bin\libassimp-5.dll" "%root_directory%\lib\assimp\bin\libassimp-5.dll" /y
-::copy "%assimp_repo_path%\build\contrib\irrXML\libIrrXML.dll" "%root_directory%\lib\assimp\bin\libIrrXML.dll" /y
-::copy "%assimp_repo_path%\build\contrib\zlib\libzlib.dll" "%root_directory%\lib\assimp\bin\libzlib.dll" /y
+copy "%assimp_repo_path%\build\bin\libassimp-5.dll"             "%root_directory%\lib\assimp\bin\libassimp-5.dll" /y
+::copy "%assimp_repo_path%\build\contrib\irrXML\libIrrXML.dll"    "%root_directory%\lib\assimp\bin\libIrrXML.dll" /y
+::copy "%assimp_repo_path%\build\contrib\zlib\libzlib.dll"        "%root_directory%\lib\assimp\bin\libzlib.dll" /y
 
 
 @echo "stripping built binaries..."
@@ -91,16 +91,16 @@ strip "%root_directory%\lib\assimp\bin\libassimp-5.dll"
 @echo "done"
 
 
-xcopy "%assimp_repo_path%\include\*" "%root_directory%\lib\assimp\include\" /e /y
-copy "%assimp_repo_path%\build\include\assimp\config.h" "%root_directory%\lib\assimp\include\assimp\config.h" /y
+xcopy "%assimp_repo_path%\include\*"                            "%root_directory%\lib\assimp\include\" /e /y
+copy "%assimp_repo_path%\build\include\assimp\config.h"         "%root_directory%\lib\assimp\include\assimp\config.h" /y
 
 ::copy from ./lib/assimp to ./bin
-copy "%root_directory%\lib\assimp\bin\libassimp-5.dll" "%target_dir_debug%\libassimp-5.dll" /y
-::copy "%assimp_repo_path%\build\contrib\irrXML\libIrrXML.dll" "%target_dir_debug%\libIrrXML.dll" /y
+copy "%root_directory%\lib\assimp\bin\libassimp-5.dll"          "%target_dir_debug%\libassimp-5.dll" /y
+::copy "%assimp_repo_path%\build\contrib\irrXML\libIrrXML.dll"    "%target_dir_debug%\libIrrXML.dll" /y
 ::libzlib.dll
 
-copy "%root_directory%\lib\assimp\bin\libassimp-5.dll" "%target_dir_release%\libassimp-5.dll" /y
-::copy "%assimp_repo_path%\build\contrib\irrXML\libIrrXML.dll" "%target_dir_release%\libIrrXML.dll" /y
+copy "%root_directory%\lib\assimp\bin\libassimp-5.dll"          "%target_dir_release%\libassimp-5.dll" /y
+::copy "%assimp_repo_path%\build\contrib\irrXML\libIrrXML.dll"    "%target_dir_release%\libIrrXML.dll" /y
 ::libzlib.dll
 
 popd

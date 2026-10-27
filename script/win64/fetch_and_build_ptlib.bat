@@ -4,6 +4,7 @@ call .\set_env.bat
 ::gets the following variables
 ::  win_script_dir
 ::  root_directory
+::  toolset_name
 ::  build_platform
 ::  temp_dir
 
@@ -15,6 +16,9 @@ call .\set_env.bat
 
 set download_link=https://github.com/pttoth/ptlib
 set repo_version=v2.0.0b13
+::set repo_version=master
+
+set target_lib_dir=%root_directory%\lib\%build_platform%
 
 pushd "%temp_dir%"
 
@@ -36,7 +40,7 @@ git checkout %repo_version%
 
 mkdir "%temp_dir%\ptlib\build" >nul 2>&1
 cd "projects/win64/"
-cmake . -B"%temp_dir%\ptlib\build" -G"MinGW Makefiles"
+cmake -B"%temp_dir%\ptlib\build" -G"MinGW Makefiles" .
 cd "%temp_dir%\ptlib\build"
 @echo -----
 @echo building with %NUMBER_OF_PROCESSORS% threads
@@ -49,7 +53,7 @@ mingw32-make -j %NUMBER_OF_PROCESSORS% --output-sync
 
 @echo ------------------------------
 @echo setting up ptlib for use
-@echo   folder: "%root_directory%\lib\ptlib"
+@echo   folder: "%target_lib_dir%\ptlib"
 @echo ------------------------------
 
 ::NOTE: careful with directory deletion because Batch is abhorrently unpredictable with quotes in variables
@@ -58,16 +62,16 @@ mingw32-make -j %NUMBER_OF_PROCESSORS% --output-sync
 ::@echo DELETING FOLDER: "%root_directory%\lib\ptlib" ...
 ::rmdir /s "%root_directory%\lib\ptlib" /q
 
-mkdir "%root_directory%\lib" >nul 2>&1
-mkdir "%root_directory%\lib\ptlib" >nul 2>&1
-mkdir "%root_directory%\lib\ptlib\include" >nul 2>&1
-mkdir "%root_directory%\lib\ptlib\include\pt" >nul 2>&1
-mkdir "%root_directory%\lib\ptlib\bin" >nul 2>&1
+mkdir "%target_lib_dir%" >nul 2>&1
+mkdir "%target_lib_dir%\ptlib" >nul 2>&1
+mkdir "%target_lib_dir%\ptlib\include" >nul 2>&1
+mkdir "%target_lib_dir%\ptlib\include\pt" >nul 2>&1
+mkdir "%target_lib_dir%\ptlib\bin" >nul 2>&1
 
 ::copy include
-xcopy "%temp_dir%\ptlib\include\pt\*" "%root_directory%\lib\ptlib\include\pt" /sy
+xcopy "%temp_dir%\ptlib\include\pt\*"           "%target_lib_dir%\ptlib\include\pt" /sy
 ::copy binaries to lib/
-copy "%temp_dir%\ptlib\bin\win64\libptlib.a" "%root_directory%\lib\ptlib\bin\" /y
+copy "%temp_dir%\ptlib\bin\win64\libptlib.a"    "%target_lib_dir%\ptlib\bin\" /y
 
 popd
 

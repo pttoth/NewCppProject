@@ -4,6 +4,7 @@ call .\set_env.bat
 ::gets the following variables
 ::  win_script_dir
 ::  root_directory
+::  toolset_name
 ::  build_platform
 ::  temp_dir
 
@@ -15,6 +16,8 @@ call .\set_env.bat
 
 set download_link=https://github.com/pttoth/math3d
 set repo_version=v1.2.7
+
+set target_lib_dir=%root_directory%\lib\%build_platform%
 
 pushd "%temp_dir%"
 
@@ -35,7 +38,7 @@ git checkout %repo_version%
 @echo ------------------------------
 
 mkdir "%temp_dir%\math3d\build" >nul 2>&1
-cmake . -B"%temp_dir%\math3d\build" -G"MinGW Makefiles"
+cmake -B"%temp_dir%\math3d\build" -G"MinGW Makefiles" .
 cd "%temp_dir%\math3d\build"
 @echo -----
 @echo building with %NUMBER_OF_PROCESSORS% threads
@@ -44,7 +47,7 @@ mingw32-make -j %NUMBER_OF_PROCESSORS% --output-sync
 
 @echo ------------------------------
 @echo setting up math3d for use
-@echo   folder: "%root_directory%\lib\math3d"
+@echo   folder: "%target_lib_dir%\math3d"
 @echo ------------------------------
 
 ::NOTE: careful with directory deletion because Batch is abhorrently unpredictable with quotes and spaces in variables
@@ -53,15 +56,15 @@ mingw32-make -j %NUMBER_OF_PROCESSORS% --output-sync
 ::@echo DELETING FOLDER: "%root_directory%\lib\math3d" ...
 ::rmdir /s "%root_directory%\lib\math3d" /q
 
-mkdir "%root_directory%\lib" >nul 2>&1
-mkdir "%root_directory%\lib\math3d" >nul 2>&1
-mkdir "%root_directory%\lib\math3d\include" >nul 2>&1
-mkdir "%root_directory%\lib\math3d\bin" >nul 2>&1
+mkdir "%target_lib_dir%" >nul 2>&1
+mkdir "%target_lib_dir%\math3d" >nul 2>&1
+mkdir "%target_lib_dir%\math3d\include" >nul 2>&1
+mkdir "%target_lib_dir%\math3d\bin" >nul 2>&1
 
 ::copy include
-xcopy "%temp_dir%\math3d\include\*" "%root_directory%\lib\math3d\include" /sy
+xcopy "%temp_dir%\math3d\include\*"         "%target_lib_dir%\math3d\include" /sy
 ::copy binaries to lib/
-copy "%temp_dir%\math3d\bin\libmath3d.a" "%root_directory%\lib\math3d\bin\" /y
+copy "%temp_dir%\math3d\bin\libmath3d.a"    "%target_lib_dir%\math3d\bin\" /y
 
 popd
 

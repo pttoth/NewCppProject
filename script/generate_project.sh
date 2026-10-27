@@ -26,8 +26,10 @@ fi
 # check target platform support
 SUPPORTED_PLATFORMS=(
     "debian_amd64"
-    "win64"
+    "win64native"
 )
+# TODO: add  "win64"   for WSL buildcontainer version
+
 
 fnPrintSupportedPlatforms() {
     echo "supported platforms:"

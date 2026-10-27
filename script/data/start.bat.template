@@ -1,12 +1,7 @@
 pushd %~dp0
 
-
 ::call "..\..\script\win64\set_env.bat"
-
-
 call "..\..\script\win64\set_env.bat" >nul 2>nul
-
-
 
 __CFG_TARGET_EXECUTABLE_NAME__
 

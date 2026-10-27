@@ -29,12 +29,14 @@ TIMESTAMP="$(date +%y%m%d_%H%M%S)"
 
 # Download helper. Use Windows curl explicitly.
 download() {
-    local url="$1"
-	
-	echo "-----"
-	echo Downloading "'$url'"
+    local url="$2"
+    local name="$1"
+
+    echo "-----"
+    echo Downloading "'$name'"
+    echo   from "'$url'"
     curl.exe --fail --location --retry 3 -O "$url"
-	echo
+    echo
 }
 
 # Extract a 7z archive using the downloaded 7zr.exe.
@@ -84,10 +86,10 @@ fi
 mkdir -vp "$TOOLSET_DIR"
 cd "$TOOLSET_DIR"
 
-download $SEVENZIP_LINK
-download $GIT_LINK
-download $CMAKE_LINK
-download $MINGW_LINK
+download "7-Zip" $SEVENZIP_LINK
+download "Git"   $GIT_LINK
+download "CMake" $CMAKE_LINK
+download "MinGW" $MINGW_LINK
 
 #-------------------------
 # Extract archives

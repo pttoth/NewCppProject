@@ -8,41 +8,72 @@ popd > /dev/null
 rootdir="$scriptdir/.."
 
 platform=$1
-
-
-echo "Creating startup script for platform '$platform'"
-
+arch=mingw
 
 pushd "$rootdir" > /dev/null
-
+rootdir=$(pwd)
 
 # check platform parameter
 if [ -z $platform ] ; then
     echo "No platform defined!"
     echo "  Choosing default: 'debian_amd64'"
-    platform=debian_amd64
+    platform=debian
+    arch=amd64
     #exit 1
 fi
 
+if [[ "$platform" == "win64native" ]]; then
+    platform=win64
+fi
 
-# verify that project is built for target platform
-if [ ! -d "./bin/$platform" ] ; then
-    echo "Directory does not exist: './bin/$platform/'"
+echo "Creating startup script for platform '$platform'"
+
+# enforce stricter platform def
+if [[ "$platform" == "debian_amd64" \
+   || "$platform" == "win64" || "$platform" == "win64native" ]] ;
+then
+    platform=$platform
+else
+    echo "Platform unsupported! '$platform'"
+    exit 1
+fi
+
+
+platformFull="${platform}_${arch}"
+
+# verify that project was built for target platform
+if [ ! -d "$rootdir/bin/$platformFull" ] ; then
+    echo "Directory does not exist: '$rootdir/bin/$platformFull/'"
     echo "  Build project first!"
     exit 1
 fi
 
 
-fname=$(cat "./script/data/common/__CFG_TARGET_EXECUTABLE_NAME__")
+fname=$(cat "$rootdir/script/data/common/__CFG_TARGET_EXECUTABLE_NAME__")
 
+pathTemplate=""
+pathStartupScriptName=""
 
+if [[ "$platform" == "debian_amd64" ]] ; then
+    pathTemplate=./script/data/start.sh.template
+    pathStartupScriptName="./bin/$platformFull/start_$fname.sh"
 
-cat "./script/data/start.sh.template" \
+elif [[ "$platform" == "win64native" || "$platform" == "win64" ]] ; then
+    pathTemplate=./script/data/start.bat.template
+    pathStartupScriptName="./bin/$platformFull/start_$fname.bat"
+
+else
+    echo "Platform unsupported! '$platformFull'"
+    exit 1
+fi
+
+pwd
+cat "$pathTemplate" \
     | tr '\n' '\r' \
     | sed "s/__CFG_TARGET_EXECUTABLE_NAME__/$fname/g" \
     | tr '\r' '\n' \
-    > "./bin/$platform/start_$fname.sh"
+    > "$pathStartupScriptName"
 
-chmod -v +x "./bin/$platform/start_$fname.sh"
+chmod -v +x "$pathStartupScriptName"
 
 popd > /dev/null

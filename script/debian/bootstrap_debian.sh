@@ -62,7 +62,7 @@ fi
 # build project
 ../generate_project.sh debian_$arch
 ../build_debian_$arch.sh
-../copy_startup_script.sh
+../copy_startup_script.sh --platform debian --arch amd64
 
 
 popd > /dev/null # from 'scriptdir'

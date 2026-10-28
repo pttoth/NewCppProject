@@ -22,11 +22,21 @@ archForced=""
 
 echo -n "Identifying system... "
 
+
+# Windows - native - Git Bash
+if [[ "${MSYSTEM:-}" == MINGW* || "${MSYSTEM:-}" == MSYS* ]]; then
+    echo "Windows"
+    echo "Executing '${project_root}/script/win64/bootstrap_win64native.sh'"
+    "${project_root}"/script/win64/bootstrap_win64native.sh
+
+
 # Windows + WSL
-if grep -qiE '(microsoft|wsl)' /proc/sys/kernel/osrelease 2>/dev/null ||
+#elif [[ -n "${WSL_DISTRO_NAME:-}" || -n "${WSL_INTEROP:-}" ]]; then
+elif grep -qiE '(microsoft|wsl)' /proc/sys/kernel/osrelease 2>/dev/null ||
    grep -qiE '(microsoft|wsl)' /proc/version 2>/dev/null; then
-    echo "WSL"
+    echo "Windows + WSL"
     echo "  ERROR: WSL is not yet supported!"
+    exit 1
 
 # Debian
 elif [ -f /etc/debian_version ]; then

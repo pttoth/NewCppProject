@@ -10,6 +10,32 @@ rootdir="$scriptdir/.."
 platform=$1
 arch=$2
 compiler=mingw
+target=release
+
+while [[ $# -gt 0 ]]; do
+    case "$1" in
+        "--debug")
+            target=debug
+            ;;
+        "--platform")
+            platform=$2
+            shift
+            ;;
+        "--arch")
+            arch=$2
+            shift
+            ;;
+#        "--compiler")
+#            compiler=$2
+#            ;;
+        *)
+            echo "Invalid parameter: $1"
+            exit 1
+            ;;
+    esac
+    shift
+done
+
 
 pushd "$rootdir" > /dev/null
 rootdir=$(pwd)
@@ -37,7 +63,15 @@ if [[ "$platform" == "win64native" ]]; then
     platform=win
 fi
 
-echo "Creating startup script for platform '$platform'"
+# set platformFull
+platformFull="${platform}_${arch}"
+if [[ "${platformFull}" == "win_amd64" ]];
+then
+    platformFull=win64_mingw
+fi
+
+
+echo "Creating startup script for platform '${platformFull}'"
 
 # enforce stricter platform def
 if [[ "$platform" != "debian"
@@ -55,7 +89,6 @@ then
 fi
 
 
-platformFull="${platform}_${arch}"
 
 
 # verify that project was built for target platform
@@ -84,7 +117,8 @@ else
     exit 1
 fi
 
-pwd
+
+# perform copy
 cat "$pathTemplate" \
     | tr '\n' '\r' \
     | sed "s/__CFG_TARGET_EXECUTABLE_NAME__/$fname/g" \

@@ -6,7 +6,7 @@ scriptdir=$(pwd)
 popd > /dev/null
 
 rootdir="${scriptdir}/.."
-rootdir="$(pushd -- "$rootdir" > /dev/null && pwd && popd > /dev/null)" 	# remove '..' components
+rootdir="$(pushd -- "$rootdir" > /dev/null && pwd && popd > /dev/null)"     # remove '..' components
 
 pushd "${scriptdir}"
 . ./win64/set_env.sh
@@ -28,13 +28,13 @@ fi
 
 
 if [[ "$compiler" == "msvc" ]]; then
-	echo "MSVC not yet supported!"
-	# TODO: need to figure out cmake generator...
-	# 	Visual Studio 17 2022
-	# 	Visual Studio 16 2019
-	# 	Visual Studio 15 2017
-	# 	Visual Studio 14 2015
-	exit 1
+    echo "MSVC not yet supported!"
+    # TODO: need to figure out cmake generator...
+    #   Visual Studio 17 2022
+    #   Visual Studio 16 2019
+    #   Visual Studio 15 2017
+    #   Visual Studio 14 2015
+    exit 1
 fi
 
 

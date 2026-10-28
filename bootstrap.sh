@@ -33,7 +33,7 @@ elif [ -f /etc/debian_version ]; then
     echo "Debian"
     cfg_system=debian
     cfg_arch=$( "${project_root}"/script/debian/detect_arch.sh )
-    archForced=$( "${project_root}"/script/debian/detect_arch.sh force )
+    archForced=$( "${project_root}"/script/debian/detect_arch.sh --force )
 
     if ! "${project_root}"/script/debian/validate_arch.sh $cfg_arch; then
         echo "Unknown architecture: '$archForced'"

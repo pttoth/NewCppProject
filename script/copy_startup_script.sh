@@ -8,38 +8,55 @@ popd > /dev/null
 rootdir="$scriptdir/.."
 
 platform=$1
-arch=mingw
+arch=$2
+compiler=mingw
 
 pushd "$rootdir" > /dev/null
 rootdir=$(pwd)
 
 # check platform parameter
 if [ -z $platform ] ; then
-    echo "No platform defined!"
-    echo "  Choosing default: 'debian_amd64'"
-    platform=debian
-    arch=amd64
-    #exit 1
+    echo "No platform defined! Running detection..."
+
+    if [ -z $platform ] ; then
+        platform=$( ./script/detect_platform.sh )
+    fi
+
+    if [ -z $arch ] ; then
+        arch=$( ./script/detect_arch.sh )
+    fi
+
+    echo "  Platform:       ${platform}"
+    echo "  Architecture:   ${arch}"
+    echo "  Compiler:       ${compiler}"
 fi
 
+
+# TODO: figure out, when adding WSL container
 if [[ "$platform" == "win64native" ]]; then
-    platform=win64
+    platform=win
 fi
 
 echo "Creating startup script for platform '$platform'"
 
 # enforce stricter platform def
-if [[ "$platform" == "debian_amd64" \
-   || "$platform" == "win64" || "$platform" == "win64native" ]] ;
+if [[ "$platform" != "debian"
+   && "$platform" != "win" ]] ;
 then
-    platform=$platform
-else
-    echo "Platform unsupported! '$platform'"
+    echo "Platform not supported: '$( ./script/detect_platform.sh )'!"
+    exit 1
+fi
+
+# enforce stricter platform def
+if [[ "$arch" != "amd64" ]] ;
+then
+    echo "Architecture not supported: '$( ./script/detect_arch.sh --force )'!"
     exit 1
 fi
 
 
 platformFull="${platform}_${arch}"
+
 
 # verify that project was built for target platform
 if [ ! -d "$rootdir/bin/$platformFull" ] ; then
@@ -54,11 +71,11 @@ fname=$(cat "$rootdir/script/data/common/__CFG_TARGET_EXECUTABLE_NAME__")
 pathTemplate=""
 pathStartupScriptName=""
 
-if [[ "$platform" == "debian_amd64" ]] ; then
+if [[ "$platform" == "debian" ]] ; then
     pathTemplate=./script/data/start.sh.template
     pathStartupScriptName="./bin/$platformFull/start_$fname.sh"
 
-elif [[ "$platform" == "win64native" || "$platform" == "win64" ]] ; then
+elif [[ "$platform" == "win" || "$platform" == "win64native" || "$platform" == "win64" ]] ; then
     pathTemplate=./script/data/start.bat.template
     pathStartupScriptName="./bin/$platformFull/start_$fname.bat"
 

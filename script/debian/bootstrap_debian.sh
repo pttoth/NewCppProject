@@ -17,7 +17,7 @@ fi
 
 #-------------------------
 # read and validate architeture param
-cfg_arch=$1
+cfg_arch=${1:-}
 arch=""
 if [ -z "$cfg_arch" ]; then
     cfg_arch=$( "${project_root}"/script/debian/detect_arch.sh )
@@ -62,7 +62,7 @@ fi
 # build project
 ../generate_project.sh debian_$arch
 ../build_debian_$arch.sh
-../copy_startup_script.sh debian_$arch
+../copy_startup_script.sh
 
 
 popd > /dev/null # from 'scriptdir'

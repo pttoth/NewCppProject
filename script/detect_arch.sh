@@ -11,7 +11,7 @@ arch=$(uname -m)
 archReturn=$arch
 
 # if forced, just return the raw value
-if [[ "$1" != "force" ]]; then
+if [[ "$1" != "--force" ]]; then
     # translate double namings into single possible output
     if [[   "$arch" == "x86"     || "$arch" == "i486" \
        ||   "$arch" == "i586"    || "$arch" == "i686" ]]; then  archReturn="i386" ;

@@ -28,7 +28,7 @@ cmd //c 'call .\fetch_and_build_math3d.bat'
 # generate and build project
 "${project_root}"/script/generate_project.sh win64native
 "${project_root}"/script/build_win64native.sh
-"${project_root}"/script/copy_startup_script.sh win64native
+"${project_root}"/script/copy_startup_script.sh
 
 echo "Finished"
 

@@ -71,6 +71,10 @@ then
 fi
 
 
+if [[ "${target}" == "debug" ]]; then
+    platformFull=${platformFull}_debug
+fi
+
 echo "Creating startup script for platform '${platformFull}'"
 
 # enforce stricter platform def

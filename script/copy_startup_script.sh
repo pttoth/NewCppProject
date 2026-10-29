@@ -7,8 +7,8 @@ popd > /dev/null
 
 rootdir="$scriptdir/.."
 
-platform=$1
-arch=$2
+platform=""
+arch=""
 compiler=mingw
 target=release
 
@@ -42,7 +42,7 @@ rootdir=$(pwd)
 
 # check platform parameter
 if [ -z $platform ] ; then
-    echo "No platform defined! Running detection..."
+    echo "No platform defined! Autodetecting..."
 
     if [ -z $platform ] ; then
         platform=$( ./script/detect_platform.sh )
@@ -78,6 +78,7 @@ if [[ "$platform" != "debian"
    && "$platform" != "win" ]] ;
 then
     echo "Platform not supported: '$( ./script/detect_platform.sh )'!"
+    echo "  platform=$platform"
     exit 1
 fi
 
